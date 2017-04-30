@@ -1,23 +1,13 @@
-(function () {
-"use strict";
+(function() {
+'use strict';
 
 angular.module('public')
-.controller('MyInfoController', MyInfoController);
+.controller('MyinfoController', MyinfoController);
 
-MyInfoController.$inject = ['MenuService', 'info'];
-function MyInfoController(MenuService, info) {
-  var $ctrl = this;
-
-  if (info) {
-    $ctrl.info = info;
-    MenuService.getMenuItem(info.favorite)
-      .then(function(response) {
-        $ctrl.menuItem = response;
-      })
-      .catch(function(response) {
-        console.log(response);
-      });
-  }
-};
-
+MyinfoController.$inject = ['userInfo']
+function MyinfoController(userInfo) {
+  var info = this;
+  console.info(userInfo);
+  info.userData = userInfo;
+}
 })();

@@ -1,39 +1,26 @@
-(function () {
-"use strict";
+(function() {
+'use strict';
 
 angular.module('public')
-.controller('SignUpController', SignUpController);
+.controller('SignupController', SignupController)
+.value('userInfo', {});
 
-SignUpController.$inject = ['MenuService', 'MyInfoService'];
-function SignUpController(MenuService, MyInfoService) {
-  var $ctrl = this;
-  $ctrl.info = {};
+SignupController.$inject = ['MenuService', 'userInfo'];
+function SignupController(MenuService, userInfo) {
+  var signup = this;
 
-  $ctrl.submit = function() {
-      MenuService.getMenuItem($ctrl.info.favorite)
-        .then(function(response) {
-          $ctrl.invalidFavorite = false;
-          $ctrl.submitted = true;
-          MyInfoService.setInfo($ctrl.info);
-        })
-        .catch(function() {
-          $ctrl.invalidFavorite = true;
-        });
-
-
-    }
-
-    $ctrl.validateFavorite = function() {
-      MenuService.getMenuItem($ctrl.info.favorite)
-        .then(function () {
-          $ctrl.invalidFavorite = false;
-        })
-        .catch(function() {
-          $ctrl.invalidFavorite = true;
-        });
-    }
-
+  signup.submit = function () {
+    MenuService.getShortName(signup.user.favorite)
+    .then(function (response) {
+      angular.extend(userInfo, signup.user);
+      userInfo.menuItem = response.data;
+      userInfo.registered = signup.complete = true;
+    })
+    .catch(function (error) {
+      signup.dishNotFound = true;
+    });
   };
 
+}
 
 })();
